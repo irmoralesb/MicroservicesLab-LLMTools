@@ -1,6 +1,7 @@
 from .openai_llm import OpenAILLM
-from .anthropic_llm import AnthropicLLM
+# from .anthropic_llm import AnthropicLLM
 from .llm_interface import LLMInterface
+
 
 class LLMFactory:
     """
@@ -8,7 +9,7 @@ class LLMFactory:
     """
 
     @staticmethod
-    def create_llm(provider: str, model: str, api_key: str) -> LLMInterface:
+    def create_llm(provider: str, model: str) -> LLMInterface:
         """
         Create an LLM instance based on the provider.
 
@@ -18,8 +19,8 @@ class LLMFactory:
         :return: An instance of LLMInterface.
         """
         if provider.lower() == 'openai':
-            return OpenAILLM(model, api_key)
-        elif provider.lower() == 'anthropic':
-            return AnthropicLLM(model, api_key)
+            return OpenAILLM(model)
+        # elif provider.lower() == 'anthropic':
+        #     return AnthropicLLM(model, api_key)
         else:
             raise ValueError(f"Unsupported provider: {provider}")

@@ -1,16 +1,18 @@
 from abc import ABC, abstractmethod
 
+
 class LLMInterface(ABC):
     """
     Interface for interacting with different LLM APIs.
     """
 
     @abstractmethod
-    def generate_response(self, prompt: str) -> str:
+    def translate_text(self, text_to_translate: str, target_language: str, model: str) -> str:
         """
         Generate a response from the LLM.
 
-        :param prompt: The input prompt for the LLM.
-        :return: The generated response as a string.
+        :param text_to_translate: The text to translate.
+        :target_language: The language code to translate the text to
+        :return: The generated traduction as a string.
         """
         pass
