@@ -24,4 +24,4 @@ class OpenAILLM(LLMInterface):
         :target_language: The language code to translate the text to
         :return: The generated traduction as a string.
         """
-        return translator.translate(text_to_translate, target_language)
+        return translator.translate(text_to_translate, target_language,"gpt-4o-mini")

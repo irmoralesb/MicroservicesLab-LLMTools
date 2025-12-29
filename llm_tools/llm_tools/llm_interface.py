@@ -7,7 +7,7 @@ class LLMInterface(ABC):
     """
 
     @abstractmethod
-    def translate_text(self, text_to_translate: str, target_language: str, model: str) -> str:
+    def translate_text(self, text_to_translate: str, target_language: str) -> str:
         """
         Generate a response from the LLM.
 
