@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run Translator Module",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "llm_tools.llm_tools.openai_tools.translator",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        }
+    ]
+}

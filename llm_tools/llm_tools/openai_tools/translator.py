@@ -1,8 +1,10 @@
 from llm_tools.llm_tools.openai_tools.client_provider import get_client
-import json
-# TODO: CREATE CONSTRUCTOR TO INITIALIZE THE NEEDED OBJECTS AND INJECT A DEPENDENCY TO KEEP TRACK OF THE TOKENS
+from llm_tools.llm_tools.openai_tools.Responses import TranslatorResponse
+import logging
 
-    
+logger = logging.getLogger(__name__)
+
+
 def translate(text_to_translate: str, target_language: str, model: str) -> str:
     system_text = f"""
     Act as a translator, follow the next guidelines:
@@ -20,18 +22,37 @@ def translate(text_to_translate: str, target_language: str, model: str) -> str:
     * If you don't detect the language of the input text return this: "Unable to detect original language"
     * If you don't detect the target language return this: "Unable to translate to language {target_language}".  
     """
+    logger.info("Running translate function")
+    response = TranslatorResponse()
 
-    client = get_client()
+    try:
 
-    api_response = client.chat.completions.create(
-        model=model,
-        max_completion_tokens=300,
-        temperature=0,
-        messages=[
-            {'role': 'system', 'content': system_text},
-            {'role': 'user', 'content': text_to_translate}
-        ]
-    )
-    # TODO: CONTINUE HERE, IMPLEMENT THE NEW RESPONSE CLASS FOR TRANSLATOR COMPONENT
+        logger.info("Getting the API client")
+        client = get_client()
 
-    return api_response.choices[0].message.content
+        logger.info("Making translation request")
+        api_response = client.chat.completions.create(
+            model=model,
+            max_completion_tokens=300,
+            temperature=0,
+            messages=[
+                {'role': 'system', 'content': system_text},
+                {'role': 'user', 'content': text_to_translate}
+            ]
+        )
+
+        # Checking for errors
+        if getattr(api_response, "error", None) is not None:
+            logger.error("API call Error.")
+            error = api_response.error
+            response = TranslatorResponse.from_error(
+                code=error.code, message=error.message, details=error.details, error_type=error.type)
+            return response
+
+        logger.info("Successful response, parsing data")
+        return TranslatorResponse.from_success(text_to_translate, target_language, api_response)
+    except Exception as err:
+        logger.error(f"Application Error: {str(err)}")
+        response = TranslatorResponse.from_error(
+            code=500, message="Error processing the request", details=str(err), error_type="application_error")
+        return response
