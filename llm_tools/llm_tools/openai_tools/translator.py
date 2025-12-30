@@ -5,7 +5,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def translate(text_to_translate: str, target_language: str, model: str) -> str:
+def translate(text_to_translate: str, target_language: str, model: str) -> TranslatorResponse:
     system_text = f"""
     Act as a translator, follow the next guidelines:
 
