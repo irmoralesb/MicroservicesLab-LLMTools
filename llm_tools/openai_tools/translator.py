@@ -1,5 +1,5 @@
-from llm_tools.llm_tools.openai_tools.client_provider import get_client
-from llm_tools.llm_tools.openai_tools.responses import TranslatorResponse
+from llm_tools.openai_tools.client_provider import get_client
+from llm_tools.openai_tools.responses import TranslatorResponse
 import logging
 
 logger = logging.getLogger(__name__)

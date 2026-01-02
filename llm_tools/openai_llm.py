@@ -1,5 +1,5 @@
 from .llm_interface import LLMInterface
-from llm_tools.llm_tools.openai_tools import translator
+from llm_tools.openai_tools import translator
 
 
 class OpenAILLM(LLMInterface):

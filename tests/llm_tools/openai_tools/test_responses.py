@@ -1,6 +1,6 @@
 import pytest
-from llm_tools.llm_tools.openai_tools.Responses import *
-from llm_tools.llm_tools.openai_tools.Responses import APIResponse, TranslatorResponse
+from llm_tools.openai_tools.Responses import *
+from llm_tools.openai_tools.Responses import APIResponse, TranslatorResponse
 
 # Add your test cases here
 
