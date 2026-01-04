@@ -1,4 +1,4 @@
-from llm_tools.api_response import APIResponse
+from llm_tools.api_responses import APIResponse
 from openai.types.chat import ChatCompletion
 import json
 import logging

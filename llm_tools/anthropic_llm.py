@@ -1,6 +1,6 @@
 from .llm_interface import LLMInterface
 from llm_tools.anthropic_tools import translator
-from llm_tools.api_response import APIResponse
+from llm_tools.api_responses import APIResponse
 
 
 class AnthropicLLM(LLMInterface):

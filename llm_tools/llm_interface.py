@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from llm_tools.api_response import APIResponse
+from llm_tools.api_responses import APIResponse
 
 class LLMInterface(ABC):
     """
