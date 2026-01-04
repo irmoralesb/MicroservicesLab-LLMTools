@@ -6,6 +6,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         'openai',
+        'anthropic',
         'python-dotenv'
     ],
     description='A package for working with LLM tools',

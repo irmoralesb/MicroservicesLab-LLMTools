@@ -1,11 +1,10 @@
-from llm_tools.openai_tools.client_provider import get_client
-from llm_tools.openai_tools.responses import OpenAITranslatorResponse
+from llm_tools.anthropic_tools.client_provider import get_client
+from llm_tools.anthropic_tools.responses import AnthropicTranslatorResponse
 import logging
 
 logger = logging.getLogger(__name__)
 
-
-def translate(text_to_translate: str, target_language: str, model: str) -> OpenAITranslatorResponse:
+def translate(text_to_translate: str, target_language: str, model: str) -> AnthropicTranslatorResponse:
     system_text = f"""
     Act as a translator, follow the next guidelines:
 
@@ -25,25 +24,22 @@ def translate(text_to_translate: str, target_language: str, model: str) -> OpenA
     logger.info("Running translate function")
 
     try:
-
         logger.info("Getting the API client")
         client = get_client()
 
         logger.info("Making translation request")
-        api_response = client.chat.completions.create(
+        api_response = client.messages.create(
             model=model,
-            max_completion_tokens=300,
-            temperature=0,
+            max_tokens=1024,
+            system=system_text,
             messages=[
-                {'role': 'system', 'content': system_text},
                 {'role': 'user', 'content': text_to_translate}
             ]
         )
-
         logger.info("Successful response, parsing data")
-        return OpenAITranslatorResponse.from_success(text_to_translate, target_language, api_response)
+        return AnthropicTranslatorResponse.from_success(text_to_translate, target_language, api_response)
     except Exception as err:
         logger.error(f"Application Error: {str(err)}")
-        response = OpenAITranslatorResponse.from_error(
+        response = AnthropicTranslatorResponse.from_error(
             code=500, message="Error processing the request", details=str(err), error_type="application_error")
         return response

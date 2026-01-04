@@ -1,33 +1,27 @@
-# from .llm_interface import LLMInterface
-# import anthropic
+from .llm_interface import LLMInterface
+from llm_tools.anthropic_tools import translator
+from llm_tools.api_response import APIResponse
 
 
-# class AnthropicLLM(LLMInterface):
-#     """
-#     Implementation of LLMInterface for Anthropic API.
-#     """
+class AnthropicLLM(LLMInterface):
+    """
+    Implementation of LLMInterface for Anthropic API.
+    """
 
-#     def __init__(self, model: str, api_key: str):
-#         """
-#         Initialize the Anthropic LLM instance.
+    def __init__(self, model: str):
+        """
+        Initialize the Anthropic LLM instance.
 
-#         :param model: The model to use (e.g., 'claude-v1').  # Change this to your desired Anthropic model.
-#         :param api_key: The API key for Anthropic.  # Replace with your Anthropic API key.
-#         """
-#         self.model = model
-#         self.api_key = api_key
-#         self.client = anthropic.Client(api_key)
+        :param model: The model to use (e.g., 'claude-v1').  # Change this to your desired Anthropic model.
+        """
+        self.model = model
 
-#     def generate_response(self, prompt: str) -> str:
-#         """
-#         Generate a response using the Anthropic API.
+    def translate_text(self, text_to_translate: str, target_language: str) -> APIResponse:
+        """
+        Generate a response using the Anthropic API.
 
-#         :param prompt: The input prompt for the LLM.
-#         :return: The generated response as a string.
-#         """
-#         response = self.client.completions.create(  # Adjust parameters as needed for your use case.
-#             model=self.model,
-#             prompt=prompt,
-#             max_tokens_to_sample=300
-#         )
-#         return response['completion']
+        :param text_to_translate: The text to translate.
+        :target_language: The language code to translate the text to
+        :return: The generated traduction as a string.
+        """
+        return translator.translate(text_to_translate, target_language, self.model)

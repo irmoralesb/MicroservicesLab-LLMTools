@@ -1,5 +1,5 @@
 from .openai_llm import OpenAILLM
-# from .anthropic_llm import AnthropicLLM
+from .anthropic_llm import AnthropicLLM
 from .llm_interface import LLMInterface
 
 
@@ -19,8 +19,8 @@ class LLMFactory:
         :return: An instance of LLMInterface.
         """
         if provider.lower() == 'openai':
-            return OpenAILLM(model)
-        # elif provider.lower() == 'anthropic':
-        #     return AnthropicLLM(model, api_key)
+            return OpenAILLM(model) # model example: 'gpt-4o-mini'
+        elif provider.lower() == 'anthropic':
+            return AnthropicLLM(model) # model example: 'claude-haiku-4.5'
         else:
             raise ValueError(f"Unsupported provider: {provider}")

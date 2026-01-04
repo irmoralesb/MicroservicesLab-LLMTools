@@ -1,22 +1,22 @@
 from llm_tools.api_response import APIResponse
-from openai.types.chat import ChatCompletion
+from anthropic.types import Message
+from anthropic.types import TextBlock
 import json
-import logging
+import logging 
 
 logger = logging.getLogger(__name__)
 
-class OpenAITranslatorResponse(APIResponse):
+class AnthropicTranslatorResponse(APIResponse):
     """
     Response class for translator operations.
 
     Attributes:
         data (TranslatorResponse.TranslatorData): Contains the translation data.
-    """
+    """  
 
     def __init__(self):
         super().__init__()
 
-    
     @classmethod
     def from_error(cls, code: int, message: str, details: str, error_type: str):
         api_error = cls()
@@ -27,8 +27,9 @@ class OpenAITranslatorResponse(APIResponse):
         api_error.error.type = error_type
         return api_error
 
+
     @classmethod
-    def from_success(cls, text_to_translate: str, target_language: str, response: ChatCompletion):
+    def from_success(cls, text_to_translate: str, target_language: str, response: Message):
         """
         Creates a TranslatorResponse instance from a successful ChatCompletion response.
 
@@ -41,9 +42,12 @@ class OpenAITranslatorResponse(APIResponse):
         api_response.is_success = True
 
         # Response Data
-        content = response.choices[0].message.content
-        if content is None:
-            raise ValueError("Response content is None")
+        content_block = response.content[0]
+        if isinstance(content_block, TextBlock):
+            content = content_block.text
+        else:
+            raise ValueError("Response content does not contain text")
+        
         inner_data = json.loads(content)
 
         api_response.data.text_to_translate = text_to_translate
@@ -53,7 +57,7 @@ class OpenAITranslatorResponse(APIResponse):
 
         # Tokens
         if response.usage is not None:
-            api_response.usage.input_tokens = response.usage.prompt_tokens
-            api_response.usage.output_tokens = response.usage.completion_tokens
+            api_response.usage.input_tokens = response.usage.input_tokens
+            api_response.usage.output_tokens = response.usage.output_tokens
 
         return api_response

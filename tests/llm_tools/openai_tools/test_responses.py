@@ -1,6 +1,6 @@
 import pytest
 from llm_tools.openai_tools.responses import *
-from llm_tools.openai_tools.responses import APIResponse, TranslatorResponse
+from llm_tools.openai_tools.responses import APIResponse, OpenAITranslatorResponse
 
 # Add your test cases here
 
@@ -51,14 +51,14 @@ class TestAPIResponse:
 
 class TestTranslatorResponse:
     def test_translator_data_initialization(self):
-        data = TranslatorResponse.TranslatorData()
+        data = OpenAITranslatorResponse.TranslatorData()
         assert data.text_to_translate == ""
         assert data.text_language == ""
         assert data.translated_text == ""
         assert data.translated_to_language == ""
 
     def test_set_success(self):
-        response = TranslatorResponse()
+        response = OpenAITranslatorResponse()
         response.set_success(
             text_to_translate="Hello",
             text_language="English",
@@ -72,7 +72,7 @@ class TestTranslatorResponse:
         assert response.data.translated_to_language == "Spanish"
 
     def test_set_error(self):
-        response = TranslatorResponse()
+        response = OpenAITranslatorResponse()
         response.set_error(
             404, "Not Found", "The resource was not found.", "ClientError")
         assert not response.is_success

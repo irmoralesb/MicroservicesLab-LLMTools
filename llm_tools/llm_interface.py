@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+from llm_tools.api_response import APIResponse
 
 class LLMInterface(ABC):
     """
@@ -7,7 +7,7 @@ class LLMInterface(ABC):
     """
 
     @abstractmethod
-    def translate_text(self, text_to_translate: str, target_language: str) -> str:
+    def translate_text(self, text_to_translate: str, target_language: str) -> APIResponse:
         """
         Generate a response from the LLM.
 
