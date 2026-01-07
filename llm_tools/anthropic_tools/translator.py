@@ -4,23 +4,31 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def translate(text_to_translate: str, target_language: str, model: str) -> AnthropicTranslatorResponse:
-    system_text = f"""
-    Act as a translator, follow the next guidelines:
+    system_message = """
+Act as a translation tool, NOT a conversational assistant.
 
-    Rules:
-    * Your goal is to translate any text you get to this language '{target_language}'.
-    * You have to detect the language of the text to translate and include it in the translated text in English.
-    * You don't anwser any question or provide additional feedback, the goal is only to translate the text you get, don't include additional text.
+CRITICAL RULES:
+* You MUST respond ONLY with valid JSON, no other text.
+* You MUST detect the language of the input text.
+* You MUST translate the text to Spanish only.
+* You MUST NOT engage in conversation or ask for clarification.
+* You MUST NOT include any text outside the JSON structure.
 
-    Example for target_language = spanish:
-    text_to_translate: "Tell me what is your name."
-    Response: {{"detected_language": "English","translated_text":"Dime cual es tu nombre"}}
+Response format (REQUIRED):
+{"detected_language": "LANGUAGE_NAME", "translated_text": "TRANSLATED_TEXT_HERE"}
 
-    Errors:
-    * If you don't detect the language of the input text return this: "Unable to detect original language"
-    * If you don't detect the target language return this: "Unable to translate to language {target_language}".  
-    """
+Error responses (use ONLY if applicable):
+* If language detection fails: {"error": "Unable to detect original language"}
+* If translation fails: {"error": "Unable to translate to language Spanish"}
+
+Example:
+Input: "Tell me what is your name."
+Output: {"detected_language": "English", "translated_text": "Dime cuál es tu nombre"}
+
+Remember: RESPOND ONLY WITH JSON. NO OTHER TEXT.
+"""
     logger.info("Running translate function")
 
     try:
@@ -31,7 +39,7 @@ def translate(text_to_translate: str, target_language: str, model: str) -> Anthr
         api_response = client.messages.create(
             model=model,
             max_tokens=1024,
-            system=system_text,
+            system=system_message,
             messages=[
                 {'role': 'user', 'content': text_to_translate}
             ]
